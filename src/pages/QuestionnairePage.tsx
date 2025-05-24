@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ClipboardList } from "lucide-react";
 import Input from "../components/ui/Input";
+import { useAssignments } from "../contexts/AssignmentsContext";
 
 interface Meta {
   subject: string;
@@ -21,6 +22,7 @@ interface QuestionEntry {
 const QUESTION_MARKS: QuestionEntry["marks"][] = [2, 5, 10];
 
 const QuestionnairePage: React.FC = () => {
+  const { addAssignment } = useAssignments();
   const navigate = useNavigate();
   const { state } = useLocation();
   const meta = (state as Meta) || {
@@ -64,6 +66,14 @@ const QuestionnairePage: React.FC = () => {
 
     console.log("Submitting questionnaire payload:", payload);
     // TODO: send to backend
+    addAssignment({
+      subject: meta.subject,
+      classLevel: meta.classLevel,
+      chapterNumber: meta.chapterNumber,
+      chapterName: meta.chapterName,
+      questions,
+      status: "not-started",
+    });
 
     // go back to assignment list
     navigate("/assignments");
