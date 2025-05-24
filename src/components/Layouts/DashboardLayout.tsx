@@ -1,8 +1,6 @@
-// src/components/DashboardLayout.tsx
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-
 import {
   LayoutDashboard,
   Users,
@@ -58,12 +56,15 @@ const DashboardLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col justify-between">
+      {/* ── Sidebar ─────────────────────────────────────────────────────── */}
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col justify-between">
         <div>
+          {/* Logo */}
           <div className="p-6">
-            <h1 className="text-xl font-bold">AssignAI</h1>
+            <h1 className="text-2xl font-bold">AssignAI</h1>
           </div>
+
+          {/* User Info */}
           <div className="px-6 py-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gray-200 rounded-full" />
@@ -77,6 +78,8 @@ const DashboardLayout: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Navigation */}
           <nav className="px-4 py-6">
             <ul className="space-y-2">
               <NavItem
@@ -84,6 +87,7 @@ const DashboardLayout: React.FC = () => {
                 text="Dashboard"
                 to="/dashboard"
               />
+
               {isTeacher ? (
                 <>
                   <NavItem
@@ -125,7 +129,7 @@ const DashboardLayout: React.FC = () => {
           </nav>
         </div>
 
-        {/* Bottom nav */}
+        {/* Bottom Navigation */}
         <div className="px-4 py-6 border-t border-gray-200">
           <ul className="space-y-2">
             <NavItem
@@ -140,12 +144,12 @@ const DashboardLayout: React.FC = () => {
             />
           </ul>
         </div>
-      </div>
+      </aside>
 
-      {/* Main content Outlet */}
-      <div className="flex-1 overflow-auto">
+      {/* ── Main Content ───────────────────────────────────────────────── */}
+      <main className="flex-1 overflow-auto">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };

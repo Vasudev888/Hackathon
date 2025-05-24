@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,9 +8,10 @@ import { AuthProvider } from "./contexts/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import DashboardLayout from "./components/Layouts/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome";
-import MyAssignments from "./pages/MyAssignments";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AssignmentsPage from "./pages/MyAssignments";
 import CreateAssignment from "./pages/CreateAssignment";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import QuestionnairePage from "./pages/QuestionnairePage";
 
 function App() {
   return (
@@ -19,7 +19,10 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Routes>
+            {/* Public */}
             <Route path="/login" element={<LoginPage />} />
+
+            {/* Protected + Sidebar Layout */}
             <Route
               path="/"
               element={
@@ -28,37 +31,22 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              {/* nested routes render into the <Outlet /> */}
+              {/* default → /dashboard */}
               <Route index element={<Navigate to="dashboard" replace />} />
+
+              {/* Nested pages render inside DashboardLayout’s <Outlet /> */}
               <Route path="dashboard" element={<DashboardHome />} />
               <Route path="create-assignment" element={<CreateAssignment />} />
-              <Route path="assignments" element={<MyAssignments />} />
-              {/* add other routes as needed */}
+              <Route
+                path="create-assignment/questions"
+                element={<QuestionnairePage />}
+              />
+              <Route path="assignments" element={<AssignmentsPage />} />
+
+              {/* …add more nested routes here… */}
             </Route>
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardHome />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/assignments"
-              element={
-                <ProtectedRoute>
-                  <MyAssignments />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/create-assignment"
-              element={
-                <ProtectedRoute>
-                  <CreateAssignment />
-                </ProtectedRoute>
-              }
-            />
+
+            {/* Fallback */}
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
         </div>
