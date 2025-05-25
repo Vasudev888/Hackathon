@@ -501,9 +501,9 @@ const DashboardHome: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-semibold">
-          {isTeacher ? "Teacher Dashboard" : "Student Dashboard"}
+          {localStorage.getItem("type") === "Teacher" ? "Teacher Dashboard" : "Student Dashboard"}
         </h2>
-        {isTeacher && (
+        {localStorage.getItem("type") === "Teacher" && (
           <button
             onClick={() => navigate("/assignments")}
             className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 flex items-center"
@@ -532,7 +532,7 @@ const DashboardHome: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      {isTeacher ? (
+      {localStorage.getItem("type") === "Teacher" ? (
         <TeacherDashboardContent />
       ) : (
         <StudentDashboardContent onViewAll={() => navigate("/assignments")} />

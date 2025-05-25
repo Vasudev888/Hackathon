@@ -1,9 +1,12 @@
+import axios from 'axios';
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import {  useNavigate } from 'react-router-dom';
 
 interface User {
   email: string;
   role: 'student' | 'teacher' | 'principal';
 }
+
 
 interface AuthContextType {
   user: User | null;
@@ -16,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function useAuth() {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
@@ -23,27 +27,34 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // This is a mock authentication function
-    // In a real app, you would validate credentials against a backend
+  const [user, setUser] = useState<String | null>(null);
+  let flag = false;
+  const login =  (email: string, password: string): boolean => {
     
-    // Mock validation for demo accounts
-    if (password && (
-      email === 'student@example.com' || 
-      email === 'teacher@example.com' || 
-      email === 'principal@example.com'
-    )) {
-      const role = email.split('@')[0] as 'student' | 'teacher' | 'principal';
-      setUser({ email, role });
+    axios.post("http://10.0.0.4:8080/api/token/", {
+      email: email,
+      password: password
+    }).then(e => {
+      console.log(e)
+      setUser(e.data.access)
+      localStorage.setItem("token",e.data.access)
+      
       return true;
-    }
-    
-    return false;
+    })
+    axios.get("http://10.0.0.4:8080/api/role/",{
+          headers:{
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          } 
+        }).then(e=>{
+          localStorage.setItem("type",e.data.user_type.name)
+        })
+    return true;
+
+
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
   };
 

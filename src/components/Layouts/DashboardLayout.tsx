@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import {
@@ -9,6 +9,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import axios from "axios";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -44,10 +45,15 @@ const NavItem: React.FC<NavItemProps> = ({
   );
 };
 
+
+
 const DashboardLayout: React.FC = () => {
+
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const isTeacher = user?.role === "teacher";
+  const isTeacher = localStorage.getItem("type") === "Teacher";
+  
 
   const handleLogout = () => {
     logout();
@@ -88,7 +94,7 @@ const DashboardLayout: React.FC = () => {
                 to="/dashboard"
               />
 
-              {isTeacher ? (
+              {localStorage.getItem("type") === "Teacher" ? (
                 <>
                   <NavItem
                     icon={<ClipboardList size={20} />}

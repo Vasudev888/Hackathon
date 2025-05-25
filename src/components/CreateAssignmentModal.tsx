@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Input from "./ui/Input";
 import { X } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
 
 const SUBJECTS = [
   "Mathematics",
@@ -22,7 +23,15 @@ const CreateAssignmentModal: React.FC<Props> = ({ onClose, onCreated }) => {
   const [deadline, setDeadline] = useState("");
   const [notesFile, setNotesFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [subject, setSubject] = useState<[] | null>(null);
 
+  axios.get("http://10.0.0.4:8080/api/subject",{
+    headers:{
+      Authorization:`Bearer ${localStorage.getItem('token')}`
+    }
+  }).then(e=>{
+    console.log(e)
+  })
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!deadline || !notesFile) {
